@@ -3,8 +3,9 @@ import { webhookController } from '../../controllers/webhook.controller.js';
 
 export const webhookRouter = Router();
 
-// вход от Telegram
+// Старый путь вебхука — теперь всегда 410 (мы в polling)
 webhookRouter.post('/telegram/:secret', webhookController.handleTelegramWebhook);
 
-// удобная ручка для первичной регистрации вебхука
-webhookRouter.post('/setup', webhookController.setupWebhook);
+// Служебные ручки
+webhookRouter.post('/disable', webhookController.disableWebhook);
+webhookRouter.get('/info', webhookController.info);

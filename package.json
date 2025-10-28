@@ -2,11 +2,10 @@
   "name": "manic-bot",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/server-https.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpileOnly src/server-https.ts",
+    "dev": "ts-node-dev --respawn --transpileOnly src/server.ts",
     "build": "tsc",
-    "start": "node dist/server-https.js"
+    "start": "node dist/server.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
