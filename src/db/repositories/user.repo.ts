@@ -1,9 +1,8 @@
-// src/repositories/user.repo.ts
-import { db } from "../db/knex.js";
+import { db } from "../knex.js";
 import type { Context } from "telegraf";
 
 export type UserRow = {
-  id: number; // telegram user id
+  id: number;
   chat_id: number | null;
   chat_type: "private" | "group" | "supergroup" | "channel" | null;
   username: string | null;
@@ -13,29 +12,25 @@ export type UserRow = {
   phone_verified: 0 | 1 | boolean;
   tg_language: string | null;
   last_seen_at?: Date | null;
-  created_at?: Date;
-  updated_at?: Date;
 };
 
 export const userRepo = {
   async upsertFromCtx(ctx: Context) {
     const u = ctx.from!;
     const chat = ctx.chat!;
-
     const row: Partial<UserRow> & Pick<UserRow, "id"> = {
-      id: u.id, // Number в JS — ок для BIGINT (предел >> id Telegram)
+      id: u.id,
       chat_id: chat?.id ?? null,
-      chat_type: (chat?.type as UserRow["chat_type"]) ?? null,
+      chat_type: (chat?.type as any) ?? null,
       username: u.username ?? null,
       first_name: u.first_name ?? null,
       last_name: u.last_name ?? null,
       tg_language: (u as any).language_code ?? null,
       last_seen_at: new Date(),
     };
-
     await db<UserRow>("users")
       .insert(row as any)
-      .onConflict("id") // PK или UNIQUE столбец
+      .onConflict("id")
       .merge({
         chat_id: row.chat_id ?? null,
         chat_type: row.chat_type ?? null,
@@ -44,9 +39,7 @@ export const userRepo = {
         last_name: row.last_name ?? null,
         tg_language: row.tg_language ?? null,
         last_seen_at: db.fn.now(),
-        updated_at: db.fn.now(),
       });
-
     return db<UserRow>("users").where({ id: row.id }).first();
   },
 };

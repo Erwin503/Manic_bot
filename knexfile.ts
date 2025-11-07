@@ -1,4 +1,3 @@
-// knexfile.ts
 import "dotenv/config";
 import type { Knex } from "knex";
 
@@ -11,19 +10,13 @@ const config: Knex.Config = {
     password: process.env.DB_PASS,
     database: process.env.DB_NAME,
   },
-  pool: {
-    min: Number(process.env.DB_POOL_MIN ?? 2),
-    max: Number(process.env.DB_POOL_MAX ?? 10),
-  },
+  pool: { min: 2, max: 10 },
   migrations: {
     tableName: "knex_migrations",
     directory: "./migrations",
-    extension: "ts", // миграции на TypeScript
+    extension: "ts",
   },
-  seeds: {
-    directory: "./seeds",
-    // extension: 'ts', // раскомментируй, если сиды тоже на TS
-  },
+  seeds: { directory: "./seeds" },
 };
 
 export default config;

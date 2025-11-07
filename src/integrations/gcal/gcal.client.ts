@@ -1,0 +1,3 @@
+export const gcalClient = {
+  // init auth, listFreeSlots(staffCalendarId, from, to, durationMin), createEvent, deleteEvent...
+};

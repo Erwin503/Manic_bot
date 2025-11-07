@@ -1,14 +1,14 @@
-import express from 'express';
-import { routes } from './routes/index.js';
-import { notFound, errorHandler } from './middlewares/error.js';
-import { registerBotHandlers } from './telegraf/handlers.js';
-import { httpLogger } from './logger.js';
-
-registerBotHandlers();
+import express from "express";
+import { httpLogger } from "./logger/index.js";
+import { registerMetrics, metricsHandler } from "./metrics/index.js";
+import { routes } from "./web/routes.js";
 
 export const app = express();
-app.use(httpLogger);                      // <— pino-http
-app.use(express.json({ limit: '1mb' }));
-app.use(routes);
-app.use(notFound);
-app.use(errorHandler);
+app.use(express.json());
+app.use(httpLogger);
+
+registerMetrics();
+app.get("/metrics", metricsHandler);
+app.get("/healthz", (_req, res) => res.status(200).send("ok"));
+
+app.use("/v1", routes);

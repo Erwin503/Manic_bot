@@ -1,7 +1,7 @@
 import { Telegraf, Context } from "telegraf";
-import { config } from "../config.js";
+import { config } from "../config/index.js";
 
-export const bot = new Telegraf<Context>(config.token);
+export const bot = new Telegraf<Context>(config.BOT_TOKEN);
 
 export async function startPolling() {
   await bot.telegram
